@@ -8,12 +8,12 @@ const Stopwatch = () => {
 
   const formatTime = (timeInSeconds) => {
     const padTime = (time, digits) => {
-      return `${new Array(digits - time.toString().length).fill(0).join("")}${time}`;
+      return '${new Array(digits - time.toString().length).fill(0).join("")}${time};
     };
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = timeInSeconds % 60;
-    return `${padTime(hours, 2)}:${padTime(minutes, 2)}:${padTime(seconds, 2)}`;
+    return ${padTime(hours, 2)}:${padTime(minutes, 2)}:${padTime(seconds, 2)};
   };
 
   const handleStart = () => {
