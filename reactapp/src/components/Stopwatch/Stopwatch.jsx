@@ -1,71 +1,72 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClock } from '@fortawesome/free-regular-svg-icons'
 
-const Stopwatch = () => {
-    const [time, setTime] = useState(0);
-    const [running, setRunning] = useState(false);
+import './App.css';
 
-    useEffect(() => {
-        let interval;
-        if (running) {
-            interval = setInterval(() => {
-                setTime(prevTime => prevTime + 1);
-            }, 1000);
-        } else {
-            clearInterval(interval);
-        }
+const element = <FontAwesomeIcon icon={faClock} />
 
-        return () => {
-            clearInterval(interval);
-        };
-    }, [running]);
+const App = () => {
+  const [timer, setTimer] = useState(3595)
+  const [isActive, setIsActive] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const increment = useRef(null)
 
-    const handleStart = () => {
-        setRunning(true);
-    };
+  const handleStart = () => {
+    setIsActive(true)
+    setIsPaused(true)
+    increment.current = setInterval(() => {
+      setTimer((timer) => timer + 1)
+    }, 1000)
+  }
 
-    const handlePause = () => {
-        setRunning(false);
-    };
+  const handlePause = () => {
+    clearInterval(increment.current)
+    setIsPaused(false)
+  }
 
-    const handleResume = () => {
-        setRunning(true);
-    };
+  const handleResume = () => {
+    setIsPaused(true)
+    increment.current = setInterval(() => {
+      setTimer((timer) => timer + 1)
+    }, 1000)
+  }
 
-    const handleReset = () => {
-        setRunning(false);
-        setTime(0);
-    };
+  const handleReset = () => {
+    clearInterval(increment.current)
+    setIsActive(false)
+    setIsPaused(false)
+    setTimer(0)
+  }
 
-    return (
-        <div>
-            <p id="time" data-testid="time">
-                {time} seconds
-            </p>
-            {running ? (
-                <div>
-                    <button id="pause" data-testid="pause" onClick={handlePause}>
-                        Pause
-                    </button>
-                </div>
-            ) : (
-                <div>
-                    <button id="start" data-testid="start" onClick={handleStart}>
-                        Start
-                    </button>
-                    <button id="reset" data-testid="reset" onClick={handleReset}>
-                        Reset
-                    </button>
-                </div>
-            )}
-            {running ? (
-                <div>
-                    <button id="resume" data-testid="resume" onClick={handleResume}>
-                        Resume
-                    </button>
-                </div>
-            ) : null}
+  const formatTime = () => {
+    const getSeconds = `0${(timer % 60)}`.slice(-2)
+    const minutes = `${Math.floor(timer / 60)}`
+    const getMinutes = `0${minutes % 60}`.slice(-2)
+    const getHours = `0${Math.floor(timer / 3600)}`.slice(-2)
+
+    return `${getHours} : ${getMinutes} : ${getSeconds}`
+  }
+
+  return (
+    <div className="app">
+      <h3>React Stopwatch {element}</h3>
+      <div className='stopwatch-card'>
+        <p>{formatTime()}</p>
+        <div className='buttons'>
+          {
+            !isActive && !isPaused ?
+              <button onClick={handleStart}>Start</button>
+              : (
+                isPaused ? <button onClick={handlePause}>Pause</button> :
+                  <button onClick={handleResume}>Resume</button>
+              )
+          }
+          <button onClick={handleReset} disabled={!isActive}>Reset</button>
         </div>
-    );
-};
+      </div>
+    </div>
+  );
+}
 
-export default Stopwatch;
+export default App;
