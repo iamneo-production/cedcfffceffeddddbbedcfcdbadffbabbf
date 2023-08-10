@@ -35,12 +35,12 @@ const Stopwatch = () => {
   }
 
   const formatTime = () => {
-    const getSeconds = 0${(timer % 60)}.slice(-2)
-    const minutes = ${Math.floor(timer / 60)}
-    const getMinutes = 0${minutes % 60}.slice(-2)
-    const getHours = 0${Math.floor(timer / 3600)}.slice(-2)
+    const getSeconds = '0${(timer % 60)}'.slice(-2)
+    const minutes = '${Math.floor(timer / 60)}'
+    const getMinutes = '0${minutes % 60}'.slice(-2)
+    const getHours = '0${Math.floor(timer / 3600)}'.slice(-2)
 
-    return ${getHours} : ${getMinutes} : ${getSeconds}
+    return '${getHours} : ${getMinutes} : ${getSeconds}'
   }
 
   return (
@@ -53,7 +53,7 @@ const Stopwatch = () => {
             !isActive && !isPaused ?
               <button data-testid="start" onClick={handleStart}>Start</button>
               : (
-                isPaused ? <button data-testid="pause"onClick={handlePause}>Pause</button> :
+                isPaused ? <button data-testid="pause"onClick= {handlePause}>Pause</button> :
                   <button onClick={handleResume}>Resume</button>
               )
           }
