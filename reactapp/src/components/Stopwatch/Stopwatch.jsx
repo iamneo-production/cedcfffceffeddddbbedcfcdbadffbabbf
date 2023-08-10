@@ -1,73 +1,67 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from 'reactapp';
+
 
 const Stopwatch = () => {
-  const [time, setTime] = useState(0);
-  const [isActive, setIsActive] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const countRef = useRef(null);
-
-  const formatTime = (timeInSeconds) => {
-    const padTime = (time, digits) => {
-      return '${new Array(digits - time.toString().length).fill(0).join("")}${time}';
-    };
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = timeInSeconds % 60;
-    return '${padTime(hours, 2)}:${padTime(minutes, 2)}:${padTime(seconds, 2)}';
-  };
+  const [timer, setTimer] = useState(0,0,0)
+  const [isActive, setIsActive] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const increment = useRef(null)
 
   const handleStart = () => {
-    setIsActive(true);
-    setIsPaused(false);
-    countRef.current = setInterval(() => {
-      setTime((time) => time + 1);
-    }, 1000);
-  };
+    setIsActive(true)
+    setIsPaused(true)
+    increment.current = setInterval(() => {
+      setTimer((timer) => timer + 1)
+    }, 1000)
+  }
 
   const handlePause = () => {
-    clearInterval(countRef.current);
-    setIsPaused(true);
-    setIsActive(false);
-  };
+    clearInterval(increment.current)
+    setIsPaused(false)
+  }
 
   const handleResume = () => {
-    setIsActive(true);
-    setIsPaused(false);
-    countRef.current = setInterval(() => {
-      setTime((time) => time + 1);
-    }, 1000);
-  };
+    setIsPaused(true)
+    increment.current = setInterval(() => {
+      setTimer((timer) => timer + 1)
+    }, 1000)
+  }
 
   const handleReset = () => {
-    clearInterval(countRef.current);
-    setIsActive(false);
-    setIsPaused(false);
-    setTime(0);
-  };
+    clearInterval(increment.current)
+    setIsActive(false)
+    setIsPaused(false)
+    setTimer(0)
+  }
+
+  const formatTime = () => {
+    const getSeconds = 0${(timer % 60)}.slice(-2)
+    const minutes = ${Math.floor(timer / 60)}
+    const getMinutes = 0${minutes % 60}.slice(-2)
+    const getHours = 0${Math.floor(timer / 3600)}.slice(-2)
+
+    return ${getHours} : ${getMinutes} : ${getSeconds}
+  }
 
   return (
-    <div>
-      <p data-testid="time">{formatTime(time)}</p>
-      {!isActive && !isPaused && (
-        <button data-testid="start" onClick={handleStart}>
-          Start
-        </button>
-      )}
-      {(isActive || isPaused) && (
-        <button data-testid="pause" onClick={handlePause}>
-          Pause
-        </button>
-      )}
-      {isPaused && (
-        <button data-testid="resume" onClick={handleResume}>
-          Resume
-        </button>
-      )}
-      <button data-testid="reset" onClick={handleReset} disabled={!isActive && !isPaused}>
-        Reset
-      </button>
+    <div className="app">
+      <h3>React Stopwatch </h3>
+      <div className='stopwatch-card'>
+        <p data-testid="time">{formatTime()}</p>
+        <div className='buttons'>
+          {
+            !isActive && !isPaused ?
+              <button data-testid="start" onClick={handleStart}>Start</button>
+              : (
+                isPaused ? <button data-testid="pause"onClick={handlePause}>Pause</button> :
+                  <button onClick={handleResume}>Resume</button>
+              )
+          }
+          <button data-testid="reset"  onClick={handleReset}disabled={!isActive} >Reset</button>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default Stopwatch;
