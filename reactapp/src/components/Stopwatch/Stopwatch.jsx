@@ -1,25 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Timer = () => {
-  const [running, setRunning] = useState(false);
-  const [paused, setPaused] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [time, setTime] = useState(0);
 
-  useEffect(() => {
-    let interval;
+  const handleStart = () => {
+    setIsActive(true);
+    setIsPaused(true);
+  };
 
-    if (running && !paused) {
-      interval = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
+  const handlePause = () => {
+    setIsPaused(false);
+  };
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [running, paused]);
+  const handleResume = () => {
+    setIsPaused(true);
+  };
+
+  const handleReset = () => {
+    setIsActive(false);
+    setIsPaused(false);
+    setTime(0);
+  };
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -33,46 +36,28 @@ const Timer = () => {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   };
 
-  const startTimer = () => {
-    setRunning(true);
-    setPaused(true);
-  };
-
-  const pauseTimer = () => {
-    setPaused(true);
-  };
-
-  const resumeTimer = () => {
-    setPaused(false);
-  };
-
-  const resetTimer = () => {
-    setRunning(false);
-    setPaused(false);
-    setTime(0);
-  };
-
   return (
     <div className="app">
       <h1>React Stopwatch</h1>
       <div className='stopwatch-card'>
         <p data-testid="time">{formatTime(time)}</p>
         <div className='buttons'>
-          {!running && !paused && (
+          {!isActive && (
             <>
-              <button data-testid="start" onClick={startTimer}>Start</button>
+              <button data-testid="start" onClick={handleStart}>Start</button>
+              <button data-testid="reset" onClick={handleReset} disabled>Reset</button>
             </>
           )}
-          {running && !paused && (
+          {isActive && isPaused && (
             <>
-              <button data-testid="pause" onClick={pauseTimer}>Pause</button>
-              <button data-testid="reset" onClick={resetTimer}>Restart</button>
+              <button data-testid="resume" onClick={handleResume}>Resume</button>
+              <button data-testid="reset" onClick={handleReset}>Reset</button>
             </>
           )}
-          {paused && (
+          {isActive && !isPaused && (
             <>
-              <button data-testid="resume" onClick={resumeTimer}>Resume</button>
-              <button data-testid="reset" onClick={resetTimer}>Restart</button>
+              <button data-testid="pause" onClick={handlePause}>Pause</button>
+              <button data-testid="reset" onClick={handleReset}>Reset</button>
             </>
           )}
         </div>
