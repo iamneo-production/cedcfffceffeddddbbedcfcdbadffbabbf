@@ -19,7 +19,7 @@ const Timer = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [isActive, isPaused]);
+  }, [isActive, isPaused]);  // Add isActive and isPaused to the dependency array
 
   const handleStart = () => {
     setIsActive(true);
@@ -83,3 +83,4 @@ const Timer = () => {
 }
 
 export default Timer;
+
