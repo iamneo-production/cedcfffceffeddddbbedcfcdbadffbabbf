@@ -35,6 +35,7 @@ const Timer = () => {
 
   const startTimer = () => {
     setRunning(true);
+    setPaused(true);
   };
 
   const pauseTimer = () => {
@@ -60,18 +61,18 @@ const Timer = () => {
           {!running && !paused && (
             <>
               <button data-testid="start" onClick={startTimer}>Start</button>
-              <button data-testid="reset" onClick={resetTimer} disabled>Reset</button>
             </>
           )}
           {running && !paused && (
             <>
               <button data-testid="pause" onClick={pauseTimer}>Pause</button>
+              <button data-testid="reset" onClick={resetTimer}>Restart</button>
             </>
           )}
           {paused && (
             <>
               <button data-testid="resume" onClick={resumeTimer}>Resume</button>
-              <button data-testid="pause" onClick={pauseTimer}>Pause</button>
+              <button data-testid="reset" onClick={resetTimer}>Restart</button>
             </>
           )}
         </div>
