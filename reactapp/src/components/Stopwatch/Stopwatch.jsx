@@ -55,30 +55,26 @@ const Timer = () => {
     <div className="app">
       <h1>React Stopwatch</h1>
       <div className='stopwatch-card'>
+        <p data-testid="time">{formatTime(time)}</p>
         <div className='buttons'>
-          {!running && !paused ? (
+          {!running && !paused && (
             <>
               <button data-testid="start" onClick={startTimer}>Start</button>
               <button data-testid="reset" onClick={resetTimer} disabled>Reset</button>
             </>
-          ) : (
+          )}
+          {running && !paused && (
             <>
-              {running && !paused && (
-                <>
-                  <button data-testid="pause" onClick={pauseTimer}>Pause</button>
-                  <button data-testid="reset" onClick={resetTimer}>Reset</button>
-                </>
-              )}
-              {paused && (
-                <>
-                  <button data-testid="resume" onClick={resumeTimer}>Resume</button>
-                  <button data-testid="reset" onClick={resetTimer}>Reset</button>
-                </>
-              )}
+              <button data-testid="pause" onClick={pauseTimer}>Pause</button>
+            </>
+          )}
+          {paused && (
+            <>
+              <button data-testid="resume" onClick={resumeTimer}>Resume</button>
+              <button data-testid="pause" onClick={pauseTimer}>Pause</button>
             </>
           )}
         </div>
-        <p data-testid="time">{formatTime(time)}</p>
       </div>
     </div>
   );
