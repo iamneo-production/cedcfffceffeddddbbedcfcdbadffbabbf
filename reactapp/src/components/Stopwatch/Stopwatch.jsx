@@ -55,7 +55,6 @@ const Timer = () => {
     <div className="app">
       <h1>React Stopwatch</h1>
       <div className='stopwatch-card'>
-        <p data-testid="time">{formatTime(time)}</p>
         <div className='buttons'>
           {!running && !paused ? (
             <>
@@ -79,6 +78,7 @@ const Timer = () => {
             </>
           )}
         </div>
+        <p data-testid="time">{formatTime(time)}</p>
       </div>
     </div>
   );
